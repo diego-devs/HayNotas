@@ -62,5 +62,5 @@ appsettings.Development.json
 *.pubxml
 *.publishproj
 
-# Claude auto memory (opcional - descomenta si quieres ignorarlo)
-# .claude/
+# Claude local settings (user-specific)
+**/.claude/settings.local.json
