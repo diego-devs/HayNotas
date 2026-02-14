@@ -1,0 +1,159 @@
+<UserControl x:Class="HayNotas.Views.ChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:HayNotas.Converters"
+             Background="{StaticResource BaseBrush}">
+
+    <UserControl.Resources>
+        <converters:RoleToAlignmentConverter x:Key="RoleToAlignment" />
+        <converters:RoleToBubbleColorConverter x:Key="RoleToBubbleColor" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Messages List -->
+        <ListBox Grid.Row="0" ItemsSource="{Binding Messages}"
+                 Background="Transparent" BorderThickness="0"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.CanContentScroll="False"
+                 x:Name="MessagesListBox"
+                 Margin="16,8">
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Margin" Value="0,4" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Focusable" Value="False" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <ContentPresenter />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="{Binding Role, Converter={StaticResource RoleToBubbleColor}}"
+                            CornerRadius="12"
+                            Padding="14,10"
+                            MaxWidth="600"
+                            HorizontalAlignment="{Binding Role, Converter={StaticResource RoleToAlignment}}"
+                            Margin="0,2">
+                        <TextBlock Text="{Binding Content}"
+                                   Foreground="{StaticResource TextBrush}"
+                                   TextWrapping="Wrap"
+                                   FontSize="14" />
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Status / Hypothesis area -->
+        <StackPanel Grid.Row="1" Margin="16,0,16,4">
+            <TextBlock Text="{Binding HypothesisText}"
+                       Foreground="{StaticResource SubTextBrush}"
+                       FontStyle="Italic" FontSize="12"
+                       Visibility="{Binding IsListening, Converter={StaticResource BoolToVis}}"
+                       Margin="0,0,0,2" />
+            <TextBlock Text="{Binding StatusText}"
+                       Foreground="{StaticResource PeachBrush}"
+                       FontSize="12"
+                       Visibility="{Binding StatusText.Length, Converter={StaticResource BoolToVis}}"
+                       Margin="0,0,0,2" />
+            <TextBlock Text="{Binding TokenUsageText}"
+                       Foreground="{StaticResource SubTextBrush}"
+                       FontSize="11"
+                       Visibility="{Binding TokenUsageText.Length, Converter={StaticResource BoolToVis}}"
+                       Margin="0,0,0,2" />
+        </StackPanel>
+
+        <!-- Input Bar -->
+        <Border Grid.Row="2" Background="{StaticResource MantelBrush}"
+                Padding="12" BorderBrush="{StaticResource SurfaceBrush}"
+                BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Mic Toggle -->
+                <ToggleButton Grid.Column="0"
+                              IsChecked="{Binding IsListening}"
+                              Command="{Binding ToggleListeningCommand}"
+                              Width="40" Height="40"
+                              Margin="0,0,8,0"
+                              Cursor="Hand">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="Bd" Background="{StaticResource SurfaceBrush}"
+                                                CornerRadius="8">
+                                            <TextBlock x:Name="Icon" Text="&#xE720;"
+                                                       FontFamily="Segoe MDL2 Assets"
+                                                       FontSize="18"
+                                                       Foreground="{StaticResource SubTextBrush}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource RedBrush}" />
+                                                <Setter TargetName="Icon" Property="Foreground" Value="{StaticResource CrustBrush}" />
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Bd" Property="Opacity" Value="0.85" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+
+                <!-- Text Input -->
+                <TextBox Grid.Column="1"
+                         Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource DarkTextBox}"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"
+                         MaxHeight="150"
+                         MinHeight="40"
+                         VerticalContentAlignment="Top"
+                         FontSize="14"
+                         x:Name="InputBox">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return" Modifiers="Ctrl" Command="{Binding SendMessageCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+
+                <!-- Send Button -->
+                <Button Grid.Column="2"
+                        Command="{Binding SendMessageCommand}"
+                        Style="{StaticResource PrimaryButton}"
+                        Width="40" Height="40"
+                        Margin="8,0,0,0"
+                        Padding="0">
+                    <TextBlock Text="&#xE724;" FontFamily="Segoe MDL2 Assets" FontSize="18" />
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

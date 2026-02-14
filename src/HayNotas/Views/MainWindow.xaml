@@ -1,0 +1,65 @@
+<Window x:Class="HayNotas.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:HayNotas.ViewModels"
+        Title="HayNotas" Height="700" Width="1000"
+        MinHeight="500" MinWidth="700"
+        Background="{StaticResource BaseBrush}"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="{StaticResource MantelBrush}"
+                BorderBrush="{StaticResource SurfaceBrush}" BorderThickness="0,0,1,0">
+            <DockPanel>
+                <!-- App Title -->
+                <TextBlock DockPanel.Dock="Top" Text="HayNotas"
+                           FontSize="22" FontWeight="Bold"
+                           Foreground="{StaticResource AccentBrush}"
+                           Margin="16,20,16,24" />
+
+                <!-- Navigation -->
+                <StackPanel DockPanel.Dock="Top" Margin="8,0">
+                    <RadioButton Style="{StaticResource NavButton}"
+                                 IsChecked="True"
+                                 Command="{Binding NavigateToChatCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8BD;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                                       VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Chat" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource NavButton}"
+                                 Command="{Binding NavigateToNotesCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE70B;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                                       VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Notes" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource NavButton}"
+                                 Command="{Binding NavigateToSettingsCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                                       VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Text="Settings" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+
+                <!-- Spacer -->
+                <Border />
+            </DockPanel>
+        </Border>
+
+        <!-- Content Area -->
+        <ContentControl Grid.Column="1" Content="{Binding CurrentView}" Margin="0" />
+    </Grid>
+</Window>

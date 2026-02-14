@@ -1,0 +1,109 @@
+<UserControl x:Class="HayNotas.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource BaseBrush}">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="32,20">
+        <StackPanel MaxWidth="500" HorizontalAlignment="Left">
+
+            <TextBlock Text="Settings" FontSize="24" FontWeight="Bold"
+                       Foreground="{StaticResource TextBrush}" Margin="0,0,0,24" />
+
+            <!-- Gemini API -->
+            <TextBlock Text="GEMINI API" FontSize="12" FontWeight="SemiBold"
+                       Foreground="{StaticResource AccentBrush}" Margin="0,0,0,8"
+                       />
+
+            <TextBlock Text="API Key" Foreground="{StaticResource SubTextBrush}"
+                       FontSize="12" Margin="0,0,0,4" />
+            <PasswordBox x:Name="ApiKeyBox"
+                         Style="{StaticResource DarkPasswordBox}"
+                         Margin="0,0,0,12"
+                         PasswordChanged="ApiKeyBox_PasswordChanged" />
+
+            <TextBlock Text="Model" Foreground="{StaticResource SubTextBrush}"
+                       FontSize="12" Margin="0,0,0,4" />
+            <TextBox Text="{Binding GeminiModel, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,20" />
+
+            <!-- Notes -->
+            <TextBlock Text="NOTES" FontSize="12" FontWeight="SemiBold"
+                       Foreground="{StaticResource AccentBrush}" Margin="0,8,0,8"
+                       />
+
+            <TextBlock Text="Notes Folder" Foreground="{StaticResource SubTextBrush}"
+                       FontSize="12" Margin="0,0,0,4" />
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding NotesFolder, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource DarkTextBox}" />
+                <Button Grid.Column="1" Content="Browse"
+                        Style="{StaticResource SecondaryButton}"
+                        Command="{Binding BrowseFolderCommand}"
+                        Margin="8,0,0,0" FontSize="13" />
+            </Grid>
+
+            <!-- Email / SMTP -->
+            <TextBlock Text="EMAIL (SMTP)" FontSize="12" FontWeight="SemiBold"
+                       Foreground="{StaticResource AccentBrush}" Margin="0,8,0,8"
+                       />
+
+            <TextBlock Text="SMTP Host" Foreground="{StaticResource SubTextBrush}"
+                       FontSize="12" Margin="0,0,0,4" />
+            <TextBox Text="{Binding SmtpHost, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,12" />
+
+            <TextBlock Text="SMTP Port" Foreground="{StaticResource SubTextBrush}"
+                       FontSize="12" Margin="0,0,0,4" />
+            <TextBox Text="{Binding SmtpPort, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,12" />
+
+            <TextBlock Text="Username" Foreground="{StaticResource SubTextBrush}"
+                       FontSize="12" Margin="0,0,0,4" />
+            <TextBox Text="{Binding SmtpUsername, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,12" />
+
+            <TextBlock Text="Password" Foreground="{StaticResource SubTextBrush}"
+                       FontSize="12" Margin="0,0,0,4" />
+            <PasswordBox x:Name="SmtpPasswordBox"
+                         Style="{StaticResource DarkPasswordBox}"
+                         Margin="0,0,0,12"
+                         PasswordChanged="SmtpPasswordBox_PasswordChanged" />
+
+            <CheckBox Content="Use SSL" IsChecked="{Binding SmtpUseSsl}"
+                      Style="{StaticResource DarkCheckBox}" Margin="0,0,0,12" />
+
+            <TextBlock Text="From Address" Foreground="{StaticResource SubTextBrush}"
+                       FontSize="12" Margin="0,0,0,4" />
+            <TextBox Text="{Binding SmtpFromAddress, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,20" />
+
+            <!-- WhatsApp -->
+            <TextBlock Text="WHATSAPP" FontSize="12" FontWeight="SemiBold"
+                       Foreground="{StaticResource AccentBrush}" Margin="0,8,0,8"
+                       />
+
+            <TextBlock Text="Default Phone Number (with country code, no +)"
+                       Foreground="{StaticResource SubTextBrush}"
+                       FontSize="12" Margin="0,0,0,4" />
+            <TextBox Text="{Binding DefaultWhatsAppNumber, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource DarkTextBox}" Margin="0,0,0,24" />
+
+            <!-- Save -->
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Save Settings" Style="{StaticResource PrimaryButton}"
+                        Command="{Binding SaveCommand}" FontSize="14"
+                        Padding="24,10" />
+                <TextBlock Text="{Binding StatusText}"
+                           Foreground="{StaticResource GreenBrush}"
+                           FontSize="13" VerticalAlignment="Center"
+                           Margin="16,0,0,0" />
+            </StackPanel>
+
+            <Separator Margin="0,24" Background="{StaticResource SurfaceBrush}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
